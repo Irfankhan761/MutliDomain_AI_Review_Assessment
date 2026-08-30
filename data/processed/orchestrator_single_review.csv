@@ -1,0 +1,2 @@
+review_id,domain,entity_id,entity_name,review_text,rating,rating_original,review_date,source,raw_source_path
+single_review_001,hotel,example_hotel_001,Example Hotel,"The room was dirty, the staff was rude and the booking was not handled properly.",2.0,2,,single_review_input,

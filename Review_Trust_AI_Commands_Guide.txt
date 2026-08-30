@@ -1,0 +1,258 @@
+REVIEW TRUST AI - CLIENT COMMANDS GUIDE
+======================================
+Use this file from Windows PowerShell inside the project.
+Project folder name: MultiDomain_Review_Analysis_Agentic_AI
+
+
+1) PROJECT SETUP
+----------------
+Use: Go to the project folder.
+Command:
+cd "F:\..\Mobile_Review_Analysis_Agentic_AI"
+
+Use: Activate the Python virtual environment.
+Command:
+.\venv\Scripts\activate
+
+Use: Install required packages if running first time or on a new computer.
+Command:
+pip install -r requirements.txt
+
+Use: Open environment file and add/update Groq API settings if needed.
+Command:
+notepad .env
+
+Use: Check Python version.
+Command:
+python --version
+
+
+2) LOCAL MODEL CHECKS
+---------------------
+Use: Download/copy required local models if they are missing.
+Command:
+python scripts/download_local_models.py
+
+Use: Confirm that all local models load offline without contacting Hugging Face.
+Command:
+python scripts/test_local_offline_models.py
+
+Use: Test Groq API connection.
+Command:
+python scripts/test_groq_connection.py
+
+
+3) RUN FRONTEND UI
+------------------
+Use: Start the Flask web interface.
+Command:
+python app.py
+
+Use: Alternative UI start command if the client prefers main.py.
+Command:
+python main.py
+
+Use: Open the UI in browser.
+Command:
+start http://127.0.0.1:5000
+
+
+First run python scripts/start_google_maps_chrome.py then python app.py
+#because u may use GoogleMap Tab 
+4) FINAL FULL SYSTEM RUN - CSV DATASET
+--------------------------------------
+Use: Run full agentic pipeline on 200 sample reviews for quick demo.
+Command:
+python scripts/run_final_orchestrator_offline.py --csv data/processed/combined_multidomain_reviews.csv --sample-size 200
+
+Use: Run full agentic pipeline on complete dataset.
+Command:
+python scripts/run_final_orchestrator_offline.py --csv data/processed/combined_multidomain_reviews.csv --sample-size 0
+
+Use: Fast test without RAG and without Groq final summary.
+Command:
+python scripts/run_final_orchestrator_offline.py --csv data/processed/combined_multidomain_reviews.csv --sample-size 200 --no-rag --no-groq
+
+Use: Run hotel dataset only.
+Command:
+python scripts/run_final_orchestrator_offline.py --csv data/processed/hotel_normalized.csv --domain hotel --sample-size 200
+
+Use: Run mobile app dataset only.
+Command:
+python scripts/run_final_orchestrator_offline.py --csv data/processed/mobile_app_normalized.csv --domain mobile_app --sample-size 200
+
+Use: Run ecommerce dataset only.
+Command:
+python scripts/run_final_orchestrator_offline.py --csv data/processed/amazon_normalized.csv --domain ecommerce --sample-size 200
+
+Use: Run restaurant dataset only.
+Command:
+python scripts/run_final_orchestrator_offline.py --csv data/processed/yelp_restaurant_normalized.csv --domain restaurant --sample-size 200
+
+
+5) FINAL FULL SYSTEM RUN - SINGLE REVIEW
+----------------------------------------
+Use: Analyse one manually entered mobile-app review.
+Command:
+python scripts/run_final_orchestrator_offline.py --input-text "The app keeps crashing after update and I cannot login." --domain mobile_app --rating 1 --entity-name "Demo App"
+
+Use: Analyse one manually entered hotel review.
+Command:
+python scripts/run_final_orchestrator_offline.py --input-text "The room was dirty and staff were rude, but the location was good." --domain hotel --rating 2 --entity-name "Demo Hotel"
+
+Use: Analyse one manually entered restaurant review.
+Command:
+python scripts/run_final_orchestrator_offline.py --input-text "Food was cold and service was very slow." --domain restaurant --rating 2 --entity-name "Demo Restaurant"
+
+Use: Analyse one manually entered ecommerce review.
+Command:
+python scripts/run_final_orchestrator_offline.py --input-text "The item was not original and looked fake." --domain ecommerce --rating 1 --entity-name "Demo Product"
+
+
+6) GOOGLE PLAY REVIEW SCRAPER + ANALYSIS
+----------------------------------------
+Use: Analyse Google Play app reviews from a Play Store URL.
+Command:
+python scripts/run_final_orchestrator_offline.py --url "https://play.google.com/store/apps/details?id=com.anydo" --max-reviews 200
+
+Use: Analyse Google Play app reviews using only App ID.
+Command:
+python scripts/run_final_orchestrator_offline.py --app-id com.anydo --max-reviews 200
+
+Use: Analyse 500 Google Play reviews for a stronger demo.
+Command:
+python scripts/run_final_orchestrator_offline.py --app-id com.siggle.production --max-reviews 500
+
+
+7) GOOGLE MAPS REVIEW SCRAPER
+-----------------------------
+Use: Start Chrome in debugging mode for Google Maps scraping.
+Command:
+python scripts/start_google_maps_chrome.py
+
+Use: Login to Google Maps in the opened Chrome window if login is needed.
+Command:
+python scripts/google_maps_login.py
+
+Use: Check that the Chrome bridge is working.
+Command:
+python scripts/check_google_maps_bridge.py
+
+Use: Scrape latest Google Maps reviews from a hotel or restaurant URL.
+Command:
+python scripts/test_google_maps_scraper.py "PASTE_GOOGLE_MAPS_PLACE_URL_HERE" --max-reviews 100 --sort newest --domain auto --cdp --output-dir outputs/google_maps_demo
+
+Use: Scrape most relevant Google Maps reviews.
+Command:
+python scripts/test_google_maps_scraper.py "PASTE_GOOGLE_MAPS_PLACE_URL_HERE" --max-reviews 100 --sort most_relevant --domain auto --cdp --output-dir outputs/google_maps_demo
+
+Use: Analyse the prepared Google Maps CSV after scraping.
+Command:
+python scripts/run_final_orchestrator_offline.py --csv "outputs/google_maps_demo/prepared_google_maps_BUSINESS_NAME.csv" --sample-size 0
+
+
+8) AGENT SELF-CHECK COMMANDS
+----------------------------
+Use: Check transformer sentiment agent.
+Command:
+python scripts/check_transformer_sentiment_agent.py --sample-size 200
+
+Use: Check rating prediction and discrepancy agent.
+Command:
+python scripts/check_rating_discrepancy_agent.py --sample-size 200
+
+Use: Check semantic issue mining agent.
+Command:
+python scripts/check_semantic_issue_mining_agent.py --sample-size 200
+
+Use: Check RAG evidence retrieval agent.
+Command:
+python scripts/check_rag_evidence_agent.py --sample-size 200
+
+Use: Check risk scoring agent.
+Command:
+python scripts/check_risk_scoring_agent.py --sample-size 200
+
+Use: Check explainability and entity summary agent.
+Command:
+python scripts/check_explainability_summary_agent.py --sample-size 200
+
+Use: Check Groq final summary agent.
+Command:
+python scripts/check_groq_final_summary_agent.py --sample-size 200
+
+
+9) DATASET PREPARATION
+----------------------
+Use: Inspect available datasets and columns.
+Command:
+python scripts/inspect_datasets.py
+
+Use: Rebuild combined multi-domain dataset from processed datasets.
+Command:
+python scripts/build_multidomain_dataset.py
+
+Use: Download Amazon All Beauty sample if required.
+Command:
+python scripts/download_amazon_all_beauty.py
+
+
+10) EVALUATION, RESULTS AND DISSERTATION FIGURES
+------------------------------------------------
+Use: Generate evaluation metrics from the latest final orchestrator run.
+Command:
+python scripts/run_evaluation_results.py --latest
+
+Use: Generate evaluation metrics from a specific final run folder.
+Command:
+python scripts/run_evaluation_results.py --run-dir "outputs/final_orchestrator_runs/RUN_FOLDER_NAME"
+
+Use: Generate dissertation-ready figures from latest Phase 15 evaluation results.
+Command:
+python scripts/generate_dissertation_figures.py
+
+Use: Generate dissertation-ready figures from a specific evaluation folder.
+Command:
+python scripts/generate_dissertation_figures.py --eval-dir "outputs/phase15_evaluation_results/EVALUATION_FOLDER_NAME"
+
+
+11) TRAINING COMMAND
+--------------------
+Use: Train DistilBERT sentiment model again if required.
+Command:
+python scripts/train_distilbert_sentiment.py --sample-size 0 --epochs 3 --batch-size 8 --max-length 128
+
+
+12) COMMON TROUBLESHOOTING COMMANDS
+-----------------------------------
+Use: Stop a running Flask server in the terminal.
+Command:
+CTRL + C
+
+Use: Check whether port 5000 is already in use.
+Command:
+netstat -ano | findstr :5000
+
+Use: Kill a stuck process by PID.
+Command:
+taskkill /PID PID_NUMBER /F
+
+Use: Clear Python cache folders if old code is still loading.
+Command:
+Get-ChildItem -Path . -Recurse -Directory -Filter "__pycache__" | Remove-Item -Recurse -Force
+
+Use: Show project files in PowerShell.
+Command:
+dir
+
+Use: Show scripts folder files.
+Command:
+dir scripts
+
+Use: Show latest final orchestrator output folders.
+Command:
+dir outputs\final_orchestrator_runs
+
+Use: Show latest evaluation output folders.
+Command:
+dir outputs\phase15_evaluation_results

@@ -1,0 +1,85 @@
+{
+  "created_at": "2026-08-23T00:52:35",
+  "random_state": 42,
+  "sample_per_domain": 5000,
+  "combined_rows": 20000,
+  "minimum_words": 4,
+  "canonical_dataset": "F:\\Clients\\Irfan Uk\\MultiDomain_Review_Analysis_Agentic_AI\\data\\processed\\combined_multidomain_reviews.csv",
+  "important_design": {
+    "single_dataset_for_all_models": true,
+    "review_text": "Canonical full review evidence used by NLP Town rating prediction, MiniLM issue mining, discrepancy analysis and the final operational pipeline.",
+    "sentiment_text": "Task-specific clean sentiment input stored in the SAME CSV. For mobile/ecommerce/restaurant it equals review_text. For hotel it uses the reliable positive/negative field for polar labels and the combined fields for neutral examples.",
+    "amazon_title": "Preserved only in raw source; not included in model review_text because explicit star phrases can leak rating-derived labels."
+  },
+  "domain_audits": [
+    {
+      "domain": "hotel",
+      "raw_rows": 515738,
+      "eligible_negative_rows": 27618,
+      "eligible_neutral_rows": 27047,
+      "eligible_positive_rows": 289626,
+      "rows_after_quality_filter": 344291,
+      "rows_before_conflict_dedup": 344291,
+      "conflicting_text_groups_removed": 22,
+      "conflicting_rows_removed": 105,
+      "duplicate_rows_removed": 9398,
+      "rows_after_conflict_dedup": 334788
+    },
+    {
+      "domain": "mobile_app",
+      "raw_rows": 12495,
+      "rows_after_quality_filter": 10752,
+      "rows_before_conflict_dedup": 10752,
+      "conflicting_text_groups_removed": 2,
+      "conflicting_rows_removed": 54,
+      "duplicate_rows_removed": 27,
+      "rows_after_conflict_dedup": 10671
+    },
+    {
+      "domain": "ecommerce",
+      "raw_rows": 30000,
+      "rows_after_quality_filter": 26997,
+      "amazon_title_used_for_model_text": false,
+      "rows_before_conflict_dedup": 26997,
+      "conflicting_text_groups_removed": 5,
+      "conflicting_rows_removed": 12,
+      "duplicate_rows_removed": 112,
+      "rows_after_conflict_dedup": 26873
+    },
+    {
+      "domain": "restaurant",
+      "raw_rows": 19896,
+      "rows_after_quality_filter": 19891,
+      "rows_before_conflict_dedup": 19891,
+      "conflicting_text_groups_removed": 0,
+      "conflicting_rows_removed": 0,
+      "duplicate_rows_removed": 0,
+      "rows_after_conflict_dedup": 19891
+    }
+  ],
+  "combined_domain_counts": {
+    "mobile_app": 5000,
+    "ecommerce": 5000,
+    "hotel": 5000,
+    "restaurant": 5000
+  },
+  "combined_sentiment_counts": {
+    "positive": 13612,
+    "negative": 4187,
+    "neutral": 2201
+  },
+  "domain_sentiment_counts": {
+    "ecommerce|negative": 1097,
+    "ecommerce|neutral": 435,
+    "ecommerce|positive": 3468,
+    "hotel|negative": 424,
+    "hotel|neutral": 404,
+    "hotel|positive": 4172,
+    "mobile_app|negative": 2044,
+    "mobile_app|neutral": 831,
+    "mobile_app|positive": 2125,
+    "restaurant|negative": 622,
+    "restaurant|neutral": 531,
+    "restaurant|positive": 3847
+  }
+}

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Review Trust AI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}" />
+</head>
+<body>
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+
+  <aside class="sidebar glass">
+    <div class="brand">
+      <div class="brand-icon">AI</div>
+      <div>
+        <h1>Review Trust AI</h1>
+        <p>Modular AI Framework For Multi-Domain Review Trust Assessment</p>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a href="#input-section">Input</a>
+      <a href="#trace-section">Execution Flow</a>
+      <a href="#results-section">Explainable Results</a>
+      <a href="#report-section">Final Summary</a>
+    </nav>
+
+    <div class="side-card">
+      <span>Model Stack</span>
+      <p>Local DistilBERT · Local nlptown BERT · Local MiniLM · FAISS RAG · Groq</p>
+    </div>
+
+    <div class="side-card">
+      <span>Health</span>
+      <p id="healthText">checking...</p>
+    </div>
+  </aside>
+
+  <main class="main">
+    <section class="hero glass">
+      <div>
+        <p class="eyebrow">Modular AI Review Intelligence</p>
+        <h2>Multi-Domain Review Trust Assessment</h2>
+        <p class="hero-text">
+          The user gives a CSV, single review, Google Play URL, App ID or exact Google Maps place URL. The orchestrator selects the workflow,
+          activates specialist agents, retrieves evidence, calculates trust/risk and produces a readable summary.
+        </p>
+      </div>
+      <div class="hero-metrics">
+        <div><strong>4</strong><span>Domains</span></div>
+        <div><strong>8+</strong><span>Agents</span></div>
+        <div><strong>RAG</strong><span>Evidence</span></div>
+      </div>
+    </section>
+
+    <section class="workflow-strip glass">
+      <span>Input</span><b>→</b><span>Orchestrator</span><b>→</b><span>Agents</span><b>→</b><span>Evidence + Risk</span><b>→</b><span>Final Summary</span>
+    </section>
+
+    <section id="input-section" class="panel glass">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Start Analysis</p>
+          <h3>Choose input workflow</h3>
+        </div>
+        <button class="ghost" id="resetBtn" type="button">Reset UI</button>
+      </div>
+
+      <form id="analysisForm">
+        <div class="tabs">
+          <button type="button" class="tab active" data-mode="csv">CSV Dataset</button>
+          <button type="button" class="tab" data-mode="single">Single Review</button>
+          <button type="button" class="tab" data-mode="google_url">Google Play URL</button>
+          <button type="button" class="tab" data-mode="app_id">App ID</button>
+          <button type="button" class="tab" data-mode="google_maps_url">Google Maps URL</button>
+        </div>
+
+        <input type="hidden" id="modeInput" name="mode" value="csv" />
+
+        <div class="form-grid">
+          <div class="field mode-panel" data-panel="csv">
+            <label>CSV Dataset</label>
+            <input type="file" name="csv_file" accept=".csv" />
+            <small>Use combined_multidomain_reviews.csv for full multi-domain demo.</small>
+          </div>
+
+          <div class="field mode-panel hidden" data-panel="single">
+            <label>Single Review Text</label>
+            <textarea name="review_text" rows="5" placeholder="Example: The app keeps crashing after the latest update and I cannot login."></textarea>
+          </div>
+
+          <div class="field mode-panel hidden" data-panel="google_url">
+            <label>Google Play URL</label>
+            <input name="google_url" placeholder="https://play.google.com/store/apps/details?id=com.example.app" />
+            <small>Reviews are collected and converted into the common schema.</small>
+          </div>
+
+          <div class="field mode-panel hidden" data-panel="app_id">
+            <label>Google Play App ID</label>
+            <input name="app_id" placeholder="com.anydo" />
+            <small>Example: com.anydo, com.todoist, com.ahchat.app</small>
+          </div>
+
+          <div class="field mode-panel hidden" data-panel="google_maps_url">
+            <label>Google Maps Place URL</label>
+            <input name="google_maps_url" placeholder="https://www.google.com/maps/place/Monal+Lahore/..." />
+            <small>Free local collector. The UI runs the tested scraper command, validates its prepared CSV, and sends that CSV into the existing analysis pipeline. Keep the signed-in Google Maps Chrome session open.</small>
+          </div>
+
+          <div class="field">
+            <label>Domain</label>
+            <select name="domain">
+              <option value="auto">Auto detect</option>
+              <option value="mobile_app">Mobile App</option>
+              <option value="hotel">Hotel</option>
+              <option value="ecommerce">E-commerce</option>
+              <option value="restaurant">Restaurant</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Rating</label>
+            <input type="number" name="rating" min="1" max="5" value="3" />
+            <small>Used only for single-review mode.</small>
+          </div>
+
+          <div class="field">
+            <label>Entity Name</label>
+            <input name="entity_name" placeholder="App / Product / Hotel / Restaurant name" />
+          </div>
+
+          <div class="field">
+            <label>Sample Size</label>
+            <input type="number" name="sample_size" value="200" min="0" />
+            <small>200 = quick demo, 0 = full dataset.</small>
+          </div>
+
+          <div class="field">
+            <label>Max Scraper Reviews</label>
+            <input type="number" name="max_scraper_reviews" value="20" min="1" max="1000" />
+            <small>Browser scraping may return fewer reviews than the displayed Google count.</small>
+          </div>
+
+          <div class="field">
+            <label>Sort Reviews</label>
+            <select name="sort_order"></select>
+            <small>Available choices change according to the selected platform.</small>
+          </div>
+        </div>
+
+        <div class="switch-row">
+          <label><input type="checkbox" name="use_rag" checked /> Use RAG evidence retrieval</label>
+          <label><input type="checkbox" name="use_groq" checked /> Use Groq final summary</label>
+        </div>
+
+        <div class="action-row">
+          <button class="primary" type="submit" id="runBtn">Run Analysis</button>
+          <span class="job-pill hidden" id="jobPill"></span>
+        </div>
+      </form>
+    </section>
+
+    <section id="trace-section" class="panel glass">
+      <div class="panel-head">
+        <div>
+          <!-- <p class="eyebrow">Agentic Coordination</p> -->
+          <h3>Execution Flow</h3>
+        </div>
+        <span class="status-badge" id="statusBadge">Waiting</span>
+      </div>
+
+      <div class="flow-steps">
+        <span>Orchestrator</span>
+        <span>Standardisation</span>
+        <span>Specialist Agents</span>
+        <span>Evidence + Risk</span>
+        <span>Finalisation</span>
+      </div>
+
+      <div class="progress-track"><div id="progressBar"></div></div>
+      <div class="trace-list" id="traceList">
+        <div class="empty-state">No run yet. Start an analysis to see the agent execution flow.</div>
+      </div>
+    </section>
+
+    <section id="results-section" class="panel glass hidden">
+      <p class="eyebrow">Explainable Analytical Output</p>
+      <h3>Overall Trust Decision</h3>
+
+      <div class="headline-card clean-summary" id="headlineCard"></div>
+
+      <div class="metric-grid">
+        <div class="metric"><span>Total Reviews</span><strong id="metricReviews">-</strong></div>
+        <div class="metric"><span>Total Entities</span><strong id="metricEntities">-</strong></div>
+        <div class="metric"><span>Average Trust</span><strong id="metricTrust">-</strong></div>
+        <div class="metric danger"><span>High Risk</span><strong id="metricHighRisk">-</strong></div>
+      </div>
+
+      <div class="summary-grid">
+        <div class="summary-card">
+          <h4>Overall Explainable Summary</h4>
+          <div id="overallAiSummary"></div>
+        </div>
+        <!-- <div class="summary-card">
+          <h4>How the Decision Was Calculated</h4>
+          <div id="scoreReasoning"></div>
+        </div>
+      </div> -->
+
+      <div class="chart-grid compact-charts">
+        <div class="mini-chart"><h4>Risk Distribution</h4><div id="riskBars"></div></div>
+        <div class="mini-chart"><h4>Domain Distribution</h4><div id="domainBars"></div></div>
+        <div class="mini-chart"><h4>Issue Distribution</h4><div id="issueBars"></div></div>
+      </div>
+
+      <div class="card-section">
+        <div class="section-title">
+          <h4 id="evidenceSectionTitle">Key Review Examples and Evidence</h4>
+          <span id="evidenceSectionSubtitle">3–4 important examples only</span>
+        </div>
+        <div id="issueExampleCards" class="result-cards issue-examples"></div>
+      </div>
+
+      <div class="card-section">
+        <div class="section-title">
+          <h4>Entity-Level Summary</h4>
+          <span>App / product / hotel / restaurant level</span>
+        </div>
+        <div id="entityCards" class="result-cards"></div>
+      </div>
+    </section>
+
+    <section id="report-section" class="panel glass hidden">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow" id="reportEyebrow">Finalisation</p>
+          <h3 id="reportTitle">Final Trust/Risk Summary</h3>
+        </div>
+        <button class="ghost" id="copyReportBtn" type="button">Copy Summary</button>
+      </div>
+      <div id="finalReport" class="report-box report-readable"><div class="empty-state dark">Run an analysis to generate the final summary.</div></div>
+
+      <div class="downloads">
+        <h4>Download Outputs</h4>
+        <div id="downloadButtons"></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast hidden" id="toast"></div>
+
+  <div class="loading hidden" id="loadingOverlay">
+    <div class="loader-card glass">
+      <div class="spinner"></div>
+      <h3>Running modular workflow...</h3>
+      <p id="loaderText">The orchestrator is coordinating specialised agents.</p>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='app.js', v='11') }}"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+python scripts/check_transformer_sentiment_agent.py --sample-size 200
+python scripts/check_rating_discrepancy_agent.py --sample-size 200
+python scripts/check_semantic_issue_mining_agent.py --sample-size 200
+python scripts/check_rag_evidence_agent.py --sample-size 200
+python scripts/check_risk_scoring_agent.py --sample-size 200
+python scripts/check_explainability_summary_agent.py --sample-size 200
+python scripts/run_evaluation_results.py --latest
