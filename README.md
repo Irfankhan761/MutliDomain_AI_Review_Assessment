@@ -1,4 +1,4 @@
-# MultiDomain Review Analysis Agentic AI
+# MultiDomain Review Analysis AI
 
 This project is an Agentic AI review trust and risk assessment system.
 
